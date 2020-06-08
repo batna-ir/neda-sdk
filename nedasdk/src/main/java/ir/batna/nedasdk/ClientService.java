@@ -76,7 +76,7 @@ public class ClientService extends IntentService {
         handleMessage(data);
     }
 
-    private void handleMessage(String data) {
+    public void handleMessage(String data) {
 
         log("Creating default Notification");
         createNotification(this, data);

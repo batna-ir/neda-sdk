@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 9902201
-        versionName "Ordibehesht-A"
+        versionCode 9903191
+        versionName "Khordad-A"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
