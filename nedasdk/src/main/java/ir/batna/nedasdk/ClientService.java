@@ -5,6 +5,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -17,6 +18,7 @@ import static ir.batna.nedasdk.NedaUtils.log;
 
 public class ClientService extends IntentService {
 
+    private static CharSequence name;
     public ClientService() {
         super(NedaUtils.NEDA_CLIENT_SERVICE);
     }
@@ -25,6 +27,10 @@ public class ClientService extends IntentService {
     protected void onHandleIntent(Intent intent) {
 
         log("NedaClientSrvice started");
+        name = getAppName(this);
+        if (Build.VERSION.SDK_INT >= 26) {
+            configureForegroundService(this, this.getPackageName());
+        }
         NedaSDKSharedPref sharedPref = new NedaSDKSharedPref(getApplicationContext());
         final Bundle bundle = intent.getExtras();
         String type = bundle.getString(NedaUtils.TYPE);
@@ -70,7 +76,7 @@ public class ClientService extends IntentService {
         handleMessage(data);
     }
 
-    public void handleMessage(String data) {
+    private void handleMessage(String data) {
 
         log("Creating default Notification");
         createNotification(this, data);
@@ -79,7 +85,6 @@ public class ClientService extends IntentService {
     private void createNotification(Context context, String text) {
 
         if (Build.VERSION.SDK_INT >= 23) {
-            CharSequence name = context.getPackageName();
             NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
             if (Build.VERSION.SDK_INT >= 26) {
                 log("Creating notification channel");
@@ -99,6 +104,40 @@ public class ClientService extends IntentService {
         } else {
             log("This version of Android does NOT support notifications");
         }
+    }
+
+    private void configureForegroundService(Context context, String text) {
+        createNotificationChannel(context);
+        NotificationCompat.Builder notification = new NotificationCompat.Builder(context, context.getPackageName())
+                .setContentText(text)
+                .setSmallIcon(R.drawable.ic_launcher_foreground);
+        startForeground(NedaUtils.NOTIFICATION_ID, notification.build());
+        log("Foreground service started");
+    }
+
+    private void createNotificationChannel(Context context) {
+
+        if (Build.VERSION.SDK_INT >= 26) {
+            log("Creating notification channel");
+            int importance = NotificationManager.IMPORTANCE_MIN;
+            NotificationChannel channel = new NotificationChannel(name.toString(), name, importance);
+            channel.setDescription(name.toString());
+            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    private CharSequence getAppName(Context context) {
+
+        ApplicationInfo applicationInfo = context.getApplicationInfo();
+        CharSequence appName = null;
+        try {
+            appName = applicationInfo.nonLocalizedLabel;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (appName == null) appName = context.getPackageName();
+        return  appName;
     }
 
 }

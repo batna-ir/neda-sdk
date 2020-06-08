@@ -22,6 +22,7 @@ public class NedaUtils {
     public static final String NOTIFICATION_CHANNEL = " notification channel";
     public static final String INSTALL_DATE = "installDate";
     public static final int UPPER_BOUND = 2100000;
+    public static final int NOTIFICATION_ID = 100;
 
     public static String getSha256(String input) {
 
