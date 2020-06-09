@@ -119,7 +119,7 @@ public class ClientService extends IntentService {
 
         if (Build.VERSION.SDK_INT >= 26) {
             log("Creating notification channel");
-            int importance = NotificationManager.IMPORTANCE_MIN;
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel(name.toString(), name, importance);
             channel.setDescription(name.toString());
             NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
