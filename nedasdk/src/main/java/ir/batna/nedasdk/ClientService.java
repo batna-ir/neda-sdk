@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Vibrator;
 
 import androidx.core.app.NotificationCompat;
 
@@ -89,7 +90,7 @@ public class ClientService extends IntentService {
             if (Build.VERSION.SDK_INT >= 26) {
                 log("Creating notification channel");
                 String description = context.getPackageName() + NedaUtils.NOTIFICATION_CHANNEL;
-                int importance = NotificationManager.IMPORTANCE_DEFAULT;
+                int importance = NotificationManager.IMPORTANCE_LOW;
                 NotificationChannel channel = new NotificationChannel(name.toString(), name, importance);
                 channel.setDescription(description);
                 notificationManager.createNotificationChannel(channel);
@@ -101,6 +102,9 @@ public class ClientService extends IntentService {
             Random random = new Random();
             int id = random.nextInt(NedaUtils.UPPER_BOUND);
             notificationManager.notify(id, notification.build());
+
+            Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+            vibrator.vibrate(NedaUtils.VIBRATE_DURATION);
         } else {
             log("This version of Android does NOT support notifications");
         }
@@ -119,7 +123,7 @@ public class ClientService extends IntentService {
 
         if (Build.VERSION.SDK_INT >= 26) {
             log("Creating notification channel");
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            int importance = NotificationManager.IMPORTANCE_LOW;
             NotificationChannel channel = new NotificationChannel(name.toString(), name, importance);
             channel.setDescription(name.toString());
             NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
