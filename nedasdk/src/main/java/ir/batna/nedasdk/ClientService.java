@@ -89,7 +89,7 @@ public class ClientService extends IntentService {
             if (Build.VERSION.SDK_INT >= 26) {
                 log("Creating notification channel");
                 String description = context.getPackageName() + NedaUtils.NOTIFICATION_CHANNEL;
-                int importance = NotificationManager.IMPORTANCE_MIN;
+                int importance = NotificationManager.IMPORTANCE_DEFAULT;
                 NotificationChannel channel = new NotificationChannel(name.toString(), name, importance);
                 channel.setDescription(description);
                 notificationManager.createNotificationChannel(channel);
