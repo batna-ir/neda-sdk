@@ -2,7 +2,6 @@ package ir.batna.nedasdk;
 
 import android.app.IntentService;
 import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -11,6 +10,7 @@ import android.os.Bundle;
 import android.os.Vibrator;
 
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import java.util.Random;
 
@@ -86,14 +86,14 @@ public class ClientService extends IntentService {
     private void createNotification(Context context, String text) {
 
         if (Build.VERSION.SDK_INT >= 23) {
-            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+            NotificationManagerCompat notificationManagerCompat = context.getSystemService(NotificationManagerCompat.class);
             if (Build.VERSION.SDK_INT >= 26) {
                 log("Creating notification channel");
                 String description = context.getPackageName() + NedaUtils.NOTIFICATION_CHANNEL;
-                int importance = NotificationManager.IMPORTANCE_LOW;
+                int importance = NotificationManagerCompat.IMPORTANCE_LOW;
                 NotificationChannel channel = new NotificationChannel(name.toString(), name, importance);
                 channel.setDescription(description);
-                notificationManager.createNotificationChannel(channel);
+                notificationManagerCompat.createNotificationChannel(channel);
             }
 
             NotificationCompat.Builder notification = new NotificationCompat.Builder(context, name.toString())
@@ -101,7 +101,7 @@ public class ClientService extends IntentService {
                     .setSmallIcon(R.drawable.ic_launcher_foreground);
             Random random = new Random();
             int id = random.nextInt(NedaUtils.UPPER_BOUND);
-            notificationManager.notify(id, notification.build());
+            notificationManagerCompat.notify(id, notification.build());
 
             Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
             vibrator.vibrate(NedaUtils.VIBRATE_DURATION);
@@ -123,11 +123,11 @@ public class ClientService extends IntentService {
 
         if (Build.VERSION.SDK_INT >= 26) {
             log("Creating notification channel");
-            int importance = NotificationManager.IMPORTANCE_LOW;
+            int importance = NotificationManagerCompat.IMPORTANCE_LOW;
             NotificationChannel channel = new NotificationChannel(name.toString(), name, importance);
             channel.setDescription(name.toString());
-            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
+            NotificationManagerCompat notificationManagerCompat = context.getSystemService(NotificationManagerCompat.class);
+            notificationManagerCompat.createNotificationChannel(channel);
         }
     }
 
