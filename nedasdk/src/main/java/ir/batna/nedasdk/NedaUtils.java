@@ -24,6 +24,9 @@ public class NedaUtils {
     public static final int UPPER_BOUND = 2100000;
     public static final int NOTIFICATION_ID = 100;
     public static final int VIBRATE_DURATION = 300;
+    public static final String NEDA_RECEIVER_INTENT_ACTION = "ir.batna.neda.message";
+    public static final String NEDA_SHARED_PREF = "NedaSharedPref";
+
 
     public static String getSha256(String input) {
 
@@ -49,6 +52,6 @@ public class NedaUtils {
 
     public static void log(String text) {
 
-        Log.v("NEDA ", "==> " + text);
+        Log.v("NEDASDK ", "==> " + text);
     }
 }

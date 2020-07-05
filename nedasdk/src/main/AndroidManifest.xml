@@ -8,9 +8,12 @@
         android:allowBackup="true"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-        <service
-            android:name=".ClientService"
-            android:exported="true"></service>
+        <receiver android:name=".ClientReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="ir.batna.neda.message" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
